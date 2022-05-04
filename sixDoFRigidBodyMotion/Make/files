@@ -1,6 +1,6 @@
 
 restraints = sixDoFRigidBodyMotion/restraints
 
-$(restraints)/newLinearSpring/newLinearSpring.C
+$(restraints)/constantForce/constantForce.C
 
 LIB = $(FOAM_USER_LIBBIN)/libmySixDoFRigidBodyMotion

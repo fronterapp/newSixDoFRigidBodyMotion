@@ -80,23 +80,24 @@ void Foam::sixDoFRigidBodyMotionRestraints::constantForce::restrain
     vector& restraintMoment
 ) const
 {
-    restraintPosition = motion.transform(refAttachmentPt_);
+    // The force application point must move with the rigid body
+    restraintPosition = motion.transform(applicationPt_); 
 
-    vector r = restraintPosition - anchor_;
+    // Transform direction into unit vector
+    vector dir = direction_;
+    scalar magDir = mag(dir);
+    dir /= (magDir + VSMALL); //VSMALL avoids by zero division
 
-    scalar magR = mag(r);
-    r /= (magR + VSMALL);
+    restraintForce = magnitude_*dir;
 
-    vector v = motion.velocity(restraintPosition);
-
-    restraintForce = -stiffness_*(magR - restLength_)*r - damping_*(r & v)*r;
-
-    restraintMoment = Zero;
+    // Torque caused by restraintForce offsset with the center of rotation is
+    // already taken into account, see sixDoFRigidBodyMotion.C line 66
+    restraintMoment = Zero;  
 
     if (motion.report())
     {
-        Info<< " attachmentPt - anchor " << r*magR
-            << " spring length " << magR
+        Info<< " force application point " << restraintPosition
+            << " force direction " << dir
             << " force " << restraintForce
             << endl;
     }

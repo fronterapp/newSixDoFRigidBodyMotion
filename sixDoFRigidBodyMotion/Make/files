@@ -1,0 +1,6 @@
+
+restraints = sixDoFRigidBodyMotion/restraints
+
+$(restraints)/newLinearSpring/newLinearSpring.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmySixDoFRigidBodyMotion
